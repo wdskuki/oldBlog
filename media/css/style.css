@@ -52,7 +52,7 @@ pre p{padding:0 0;}
 pre,code{font-family:"iosevka",Menlo,"Andale Mono",Consolas,"Courier New",Monaco,monospace;font-size:13px;}
 pre{overflow:auto;}
 pre p code{background-color: rgba(0, 0, 0, 0);}
-p code,li code{background-color:#d0d0d0;}
+/*p code,li code{background-color:#d0d0d0;}*/
 blockquote{display:block;text-align:justify;border-left:4px solid #eeeeee;}
 blockquote{margin:1em 0em;padding-left:1.5em;}
 blockquote p{margin:0;padding:.5em 0;}
