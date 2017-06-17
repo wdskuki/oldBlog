@@ -13,6 +13,6 @@ Web开发者
 
 ### 联系方式：        
 
-个人邮箱: [wei_ds@126.com](mailto:wei_ds@126.com)     
+Email: [wei_ds@126.com](mailto:wei_ds@126.com)     
 
 ----
