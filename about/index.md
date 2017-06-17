@@ -5,9 +5,7 @@ comments: no
 ---
 
 Web开发者    
-就职于[大家中医](http://www.dajiazhongyi.com)，负责[大家中医](http://www.dajiazhongyi.com)Web患者端开发
-
-推崇前端模块化工程
+目前就职于[大家中医](http://www.dajiazhongyi.com)，负责[大家中医](http://www.dajiazhongyi.com)Web患者端开发
 
 ----
 
