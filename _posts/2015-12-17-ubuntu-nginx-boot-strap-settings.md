@@ -6,6 +6,7 @@ category: linux
 tags: nginx
 ---
 
+
 这里需要特别说明的是，Ubuntu系统下没有RedHat系统下的chkconfig命令。
 但Ubuntu有一个类似的命令: `sysv-rc-conf`。
 
