@@ -23,6 +23,7 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://dswei.tech"
 twitter_username: wdskuki
 github_username:  wdskuki
+comments: '有言'
 
 # Build settings
 markdown: kramdown
