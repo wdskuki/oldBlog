@@ -26,5 +26,3 @@ comments: yes
 Email: [wei_ds@126.com](mailto:wei_ds@126.com)     
 
 ----
-
-{% include comments.md %}
