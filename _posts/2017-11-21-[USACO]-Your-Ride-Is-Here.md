@@ -6,7 +6,7 @@ category: USACO
 tags: USACO
 ---
 
-# [USACO] Your Ride is Here
+
 
 ##题目描述
 
