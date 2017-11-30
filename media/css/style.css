@@ -49,14 +49,14 @@ th {
 
 pre code{padding:3px 10px;font-size:16px;line-height:1.6;display:block;color:white;}
 pre p{padding:0 0;}
-pre,code{font-family:"iosevka",Menlo,"Andale Mono",Consolas,"Courier New",Monaco,monospace;font-size:13px;}
+pre,code{font-family:"Courier New", Monaco,"iosevka",Menlo,"Andale Mono",Consolas,,monospace;font-size:13px;}
 pre{overflow:auto;}
 pre p code{background-color: rgba(0, 0, 0, 0);}
 /*p code,li code{background-color:#d0d0d0;}*/
 blockquote{display:block;text-align:justify;border-left:4px solid #eeeeee;}
 blockquote{margin:1em 0em;padding-left:1.5em;}
 blockquote p{margin:0;padding:.5em 0;}
-#container{width:600px;margin:2em auto;display:block;padding:0 2em;}
+#container{width:65%;margin:2em auto;display:block;padding:0 2em;}
 .content{font-size:16px;line-height:24px;}
 .content h1{padding:.5em 0;}
 .content img{max-width:600px;display:block;margin:4px auto;-webkit-box-shadow:#999 1px 1px 4px;-moz-box-shadow:#999 1px 1px 4px;box-shadow:#999 1px 1px 4px;}
