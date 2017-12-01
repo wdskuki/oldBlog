@@ -6,7 +6,7 @@
 body{font-size:14px;word-spacing:1px;
 	margin-left:auto;
 margin-right:auto;
-	font-family:"Galdeano","Hiragino Sans GB","Microsoft YaHei",Trebuchet,"Trebuchet MS",Tahoma,"Lucida Grande","Lucida Sans Unicode",Verdana,sans-serif;color:#000000;background-color:#ffffff;}
+	font-family: "Heiti SC","Galdeano","Hiragino Sans GB","Microsoft YaHei",Trebuchet,"Trebuchet MS",Tahoma,"Lucida Grande","Lucida Sans Unicode",Verdana,sans-serif;color:#000000;background-color:#ffffff;}
 *{padding:0;margin: 0;border:none;outline:none;}
 a{color:#dd0000;text-decoration:none;}
 a:hover{color:#333333;text-decoration:underline;}
@@ -47,9 +47,9 @@ th {
 	border: 1px solid #dfe2e5;
 }
 
-pre code{padding:3px 10px;font-size:16px;line-height:1.6;display:block;color:white;}
+pre code{padding:3px 10px;font-size:14px;line-height:1.2;display:block;color:white;}
 pre p{padding:0 0;}
-pre,code{font-family:"Courier New", Monaco,"iosevka",Menlo,"Andale Mono",Consolas,,monospace;font-size:13px;}
+pre,code{font-family:Menlo,"Courier New", Monaco,"iosevka","Andale Mono",Consolas,,monospace;font-size:13px;}
 pre{overflow:auto;}
 pre p code{background-color: rgba(0, 0, 0, 0);}
 /*p code,li code{background-color:#d0d0d0;}*/
