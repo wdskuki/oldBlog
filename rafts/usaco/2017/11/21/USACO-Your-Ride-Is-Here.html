@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="author" content="dswei" />
+  <title>[USACO] Your Ride is Here</title>
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link href="/feed/" rel="alternate" title="dswei" type="application/atom+xml" />
+  <link rel="stylesheet" href="/media/css/style.css">
+  <!-- <link rel="stylesheet" href="/media/css/highlight.css"> -->
+  <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/solarized-light.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+</script>
+</head>
+
+<body>
+<div id="container">
+  <div id="main" role="main">
+    <header>
+      <h1>[USACO] Your Ride is Here</h1>
+    </header>
+    <nav>
+      <span><a title="home page" class="" href="/">Home</a></span>
+      <span><a title="categories" class="" href="/categories/">Categories</a></span>
+      <span><a title="tags" class="" href="/tags/">Tags</a></span>
+      <span><a title="about" class="" href="/about/">About</a></span>
+    </nav>
+    <article class="content">
+      <section class="post">
+<h2 id="题目描述">题目描述</h2>
+
+<p>每一颗彗星背后都隐藏着都一架UFO！！外星人来地球寻找支持UFO的团体，来把他们接走（类似于三体人来找叶文洁）。不过由于UFO飞船里的空间有限，因此每次只能有一个团体能够有幸登上UFO，和外星人Happy。地球上支持UFO的团体那么多，那到底那个团体会被接走呢？别急，外星人已经提前放风给地球上的支持团体了：只有团体的名字需和彗星的名字，在某种运算规则下一致，该团体才会被接走。</p>
+
+<p>团体的名字和彗星的名字都是有大写英文字母组成，字母A-Z对应数字1-26，名字会转化为数字，转化规则为，例如：“USACO” =&gt; 21 * 19 * 1 * 3 * 15 = 17955，转化后的数字再进行对47取模运算，看是否相等。如果相等，表示一致，可以被接走，反之不然。</p>
+
+<h2 id="题目分析">题目分析</h2>
+
+<p>题目表示简单。这里就不做特别分析了。将名字转化为数字，然后mod47，最后比较一下是否相等即可。</p>
+
+<h2 id="代码">代码</h2>
+
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cm">/*
+ID: dswei191
+LANG: C++
+TASK: ride
+*/</span>
+
+<span class="cp">#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+#include &lt;string&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="n">ofstream</span> <span class="n">fout</span><span class="p">(</span><span class="s">"ride.out"</span><span class="p">);</span>
+<span class="n">ifstream</span> <span class="n">fin</span><span class="p">(</span><span class="s">"ride.in"</span><span class="p">);</span>
+
+<span class="kt">int</span> <span class="n">transform</span><span class="p">(</span><span class="n">string</span> <span class="n">a</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="n">ret</span> <span class="o">*=</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">'A'</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ret</span> <span class="o">%</span> <span class="mi">47</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
+    <span class="n">string</span> <span class="n">str1</span><span class="p">,</span> <span class="n">str2</span><span class="p">;</span>
+    <span class="n">fin</span> <span class="o">&gt;&gt;</span> <span class="n">str1</span> <span class="o">&gt;&gt;</span> <span class="n">str2</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">transform</span><span class="p">(</span><span class="n">str1</span><span class="p">)</span> <span class="o">==</span> <span class="n">transform</span><span class="p">(</span><span class="n">str2</span><span class="p">)){</span>
+        <span class="n">fout</span> <span class="o">&lt;&lt;</span> <span class="s">"GO"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+        <span class="n">fout</span> <span class="o">&lt;&lt;</span> <span class="s">"STAY"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+
+</section>
+
+
+<section class="meta">
+<br/>
+<br/>
+<span>
+	<a  href="http://localhost:4000/usaco/2017/11/23/USACO-Name-That-Number.html" class="pageNav"  >Previous</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="http://localhost:4000/%E7%BE%8E%E9%A3%9F/2017/06/18/eggplant-for-dinner.html" class="pageNav"  >Next</a>
+</span>
+<hr>
+<span class="author">
+  <a href="/about/">dswei</a>
+</span>
+<span class="time">
+  /
+  <time datetime="2017-11-21">2017-11-21</time>
+</span>
+<br />
+<span class="license">
+  Published under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">(CC) BY-NC-SA</a>
+</span>
+
+<span class="categories">
+  in categories
+  
+  <a href="/categories/#USACO" title="USACO">USACO</a>&nbsp;
+  
+</span>
+
+
+<span class="tags">
+  tagged with
+  
+  <a href="/tags/#USACO" title="USACO">USACO</a>&nbsp;
+  
+</span>
+
+</section>
+
+<div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+<script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script>
+var cloudTieConfig = {
+  url: document.location.href,
+  sourceId: "",
+  productKey: "24024f5a9d78440199bc1498c6aed9b6",
+  target: "cloud-tie-wrapper"
+};
+var yunManualLoad = true;
+Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+</script>
+
+
+    </article>
+
+  </div>
+
+  <footer>
+    <p>
+      <small>
+        Powered by <a href="https://github.com/mojombo/jekyll">Jekyll</a>
+        | Copyright 2017 - 2017 by <a href="/about/">dswei</a>
+        | <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1262334832'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1262334832%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+      </small>
+    </p>
+  </footer>
+</div>
+
+
+</body>
+</html>

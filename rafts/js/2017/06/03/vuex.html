@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="author" content="dswei" />
+  <title>Vue.js数据状态管理-Vuex</title>
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link href="/feed/" rel="alternate" title="dswei" type="application/atom+xml" />
+  <link rel="stylesheet" href="/media/css/style.css">
+  <!-- <link rel="stylesheet" href="/media/css/highlight.css"> -->
+  <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/solarized-light.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+</script>
+</head>
+
+<body>
+<div id="container">
+  <div id="main" role="main">
+    <header>
+      <h1>Vue.js数据状态管理-Vuex</h1>
+    </header>
+    <nav>
+      <span><a title="home page" class="" href="/">Home</a></span>
+      <span><a title="categories" class="" href="/categories/">Categories</a></span>
+      <span><a title="tags" class="" href="/tags/">Tags</a></span>
+      <span><a title="about" class="" href="/about/">About</a></span>
+    </nav>
+    <article class="content">
+      <section class="post">
+<h2 id="上次分享回顾">上次分享回顾</h2>
+
+<blockquote>
+  <p>父子组件的通信</p>
+</blockquote>
+
+<ul>
+  <li>父 -&gt; 子： props</li>
+  <li>子 -&gt; 父： 自定义event</li>
+  <li>组件文档化</li>
+</ul>
+
+<h2 id="vuex起步">Vuex起步</h2>
+
+<blockquote>
+  <p>Vuex主要应用于中、大型单页应用的数据状态管理架构。</p>
+</blockquote>
+
+<h4 id="为什么要数据状态管理">为什么要数据状态管理？</h4>
+
+<ul>
+  <li>组件数据共享</li>
+</ul>
+
+<h4 id="组件之间如何数据共享组件通信">组件之间如何数据共享（组件通信）</h4>
+
+<ul>
+  <li>父 -&gt; 子：props</li>
+  <li>子 -&gt; 父：自定义event</li>
+  <li>兄弟之间？其他非父子? ：自定义event？</li>
+</ul>
+
+<h4 id="可能的解法">可能的解法</h4>
+
+<ol>
+  <li>
+    <p>自定义event</p>
+
+    <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">bus</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Vue</span><span class="p">()</span>
+<span class="c1">// in component A's method</span>
+<span class="nx">bus</span><span class="p">.</span><span class="nx">$emit</span><span class="p">(</span><span class="s1">'id-selected'</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">// in component B's created hook</span>
+
+<span class="nx">bus</span><span class="p">.</span><span class="nx">$on</span><span class="p">(</span><span class="s1">'id-selected'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">){</span>
+  <span class="c1">//...</span>
+<span class="p">})</span>
+</code></pre>
+    </div>
+  </li>
+  <li>
+    <p>共享数据源</p>
+
+    <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">srcData</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">count</span><span class="p">:</span> <span class="mi">0</span>
+<span class="p">}</span>
+
+<span class="kr">const</span> <span class="nx">vmA</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
+  <span class="na">data</span><span class="p">:</span> <span class="nx">srcData</span>
+<span class="p">})</span>
+
+<span class="kr">const</span> <span class="nx">vmB</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
+  <span class="na">data</span><span class="p">:</span> <span class="nx">srcData</span>
+<span class="p">})</span>
+</code></pre>
+    </div>
+  </li>
+</ol>
+
+<h4 id="存在的问题">存在的问题</h4>
+
+<ul>
+  <li>谁在emit事件？谁在on事件？父组件和子组件强耦合</li>
+  <li>如何追踪数据的状态变化？</li>
+  <li>业务逻辑遍布各个组件，导致各种意想不到的问题</li>
+</ul>
+
+<h4 id="vuex基本概念">Vuex基本概念</h4>
+
+<ul>
+  <li>state
+    <ul>
+      <li>状态的容器</li>
+    </ul>
+  </li>
+  <li>getters
+    <ul>
+      <li>状态的获取函数</li>
+    </ul>
+  </li>
+  <li>mutations
+    <ul>
+      <li>修改状态的事件回调函数</li>
+    </ul>
+  </li>
+  <li>actions
+    <ul>
+      <li>分发修改状态的事件</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">store</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Vuex</span><span class="p">.</span><span class="nx">Store</span><span class="p">({</span>
+  <span class="c1">//state</span>
+  <span class="na">state</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">count</span><span class="p">:</span> <span class="mi">0</span>
+  <span class="p">},</span>
+  <span class="c1">//mutations</span>
+  <span class="na">mutations</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nx">INIT</span> <span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">state</span><span class="p">.</span><span class="nx">count</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">count</span>
+    <span class="p">},</span>
+    <span class="nx">INCREASE</span> <span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">state</span><span class="p">.</span><span class="nx">count</span><span class="o">++</span>
+    <span class="p">},</span>
+    <span class="nx">DECREASE</span> <span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">state</span><span class="p">.</span><span class="nx">count</span><span class="o">--</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="c1">//getters</span>
+  <span class="na">getters</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nx">getCount</span> <span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">state</span><span class="p">.</span><span class="nx">count</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="c1">//actions</span>
+  <span class="na">actions</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nx">init</span><span class="p">(</span><span class="nx">context</span><span class="p">){</span>
+      <span class="nx">context</span><span class="p">.</span><span class="nx">commit</span><span class="p">(</span><span class="s1">'INIT'</span><span class="p">,</span> <span class="p">{</span>
+        <span class="na">count</span><span class="p">:</span> <span class="mi">10</span>
+      <span class="p">})</span>
+    <span class="p">},</span>
+    <span class="nx">inc</span><span class="p">(</span><span class="nx">context</span><span class="p">){</span>
+      <span class="nx">context</span><span class="p">.</span><span class="nx">commit</span><span class="p">(</span><span class="s1">'INCREASE'</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="nx">dec</span><span class="p">(</span><span class="nx">context</span><span class="p">){</span>
+      <span class="nx">context</span><span class="p">.</span><span class="nx">commit</span><span class="p">(</span><span class="s1">'DECREASE'</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+</code></pre>
+</div>
+
+<h4 id="vuex基本理解">Vuex基本理解</h4>
+
+<ul>
+  <li>数据的集合其中处理（DB）</li>
+  <li>数据的操作集中处理 （CRUD）</li>
+  <li>所有对数据的操作（CRUD）以请求（commit）的方式提交处理 （DAO）</li>
+</ul>
+
+
+</section>
+
+
+<section class="meta">
+<br/>
+<br/>
+<span>
+	<a  href="http://localhost:4000/%E7%BE%8E%E9%A3%9F/2017/06/18/eggplant-for-dinner.html" class="pageNav"  >Previous</a>
+	&nbsp;&nbsp;&nbsp;
+	<a  href="http://localhost:4000/js/2017/03/10/jquery-attr-and-data-diff.html" class="pageNav"  >Next</a>
+</span>
+<hr>
+<span class="author">
+  <a href="/about/">dswei</a>
+</span>
+<span class="time">
+  /
+  <time datetime="2017-06-03">2017-06-03</time>
+</span>
+<br />
+<span class="license">
+  Published under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">(CC) BY-NC-SA</a>
+</span>
+
+<span class="categories">
+  in categories
+  
+  <a href="/categories/#JS" title="JS">JS</a>&nbsp;
+  
+</span>
+
+
+<span class="tags">
+  tagged with
+  
+  <a href="/tags/#Vue" title="Vue">Vue</a>&nbsp;
+  
+</span>
+
+</section>
+
+<div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+<script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script>
+var cloudTieConfig = {
+  url: document.location.href,
+  sourceId: "",
+  productKey: "24024f5a9d78440199bc1498c6aed9b6",
+  target: "cloud-tie-wrapper"
+};
+var yunManualLoad = true;
+Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+</script>
+
+
+    </article>
+
+  </div>
+
+  <footer>
+    <p>
+      <small>
+        Powered by <a href="https://github.com/mojombo/jekyll">Jekyll</a>
+        | Copyright 2017 - 2017 by <a href="/about/">dswei</a>
+        | <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1262334832'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1262334832%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+      </small>
+    </p>
+  </footer>
+</div>
+
+
+</body>
+</html>

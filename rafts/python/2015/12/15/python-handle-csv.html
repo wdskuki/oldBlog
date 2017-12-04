@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="author" content="dswei" />
+  <title>Python对csv文件的处理</title>
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link href="/feed/" rel="alternate" title="dswei" type="application/atom+xml" />
+  <link rel="stylesheet" href="/media/css/style.css">
+  <!-- <link rel="stylesheet" href="/media/css/highlight.css"> -->
+  <script type="text/javascript" src="/media/js/jquery-1.7.1.min.js"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/solarized-light.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+</script>
+</head>
+
+<body>
+<div id="container">
+  <div id="main" role="main">
+    <header>
+      <h1>Python对csv文件的处理</h1>
+    </header>
+    <nav>
+      <span><a title="home page" class="" href="/">Home</a></span>
+      <span><a title="categories" class="" href="/categories/">Categories</a></span>
+      <span><a title="tags" class="" href="/tags/">Tags</a></span>
+      <span><a title="about" class="" href="/about/">About</a></span>
+    </nav>
+    <article class="content">
+      <section class="post">
+<h1 id="python对csv文件的处理">Python对csv文件的处理</h1>
+<p>公司策划那边是不是会有从相关csv文件提取相关属性所对应的所有值的需求。 为了避免手动一个文件一个文件的查找&amp;复制，写了一个脚本进行对应查找和提取。</p>
+
+<p>比如前两天有个需求是：</p>
+<blockquote>
+  <p>给出一组questid列表，在每个questid(例如99070333)后面添加一个<code class="highlighter-rouge">0</code>（变成了99070333<code class="highlighter-rouge">0</code>）,然后根据这个<code class="highlighter-rouge">questid + "0"</code>(我们定义为stageid)找出应目录下的csv文件，这些csv文件的文件名格式形式为：<strong><code class="highlighter-rouge">prefix_stageid</code>.<code class="highlighter-rouge">surfix</code></strong>。在项目中<code class="highlighter-rouge">prefix</code>为<strong>mapEventMonster</strong>, <code class="highlighter-rouge">surfix</code>为<strong>csv</strong>。因此以questid = 99070333为例，对应的csv文件名为：</p>
+</blockquote>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>mapEventMonster_990703330.csv
+</code></pre>
+</div>
+
+<p>这些csv文件格式如下（属性和值之间由<strong>逗号</strong>分隔,这里为了表示的方式来显示效果）:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>stageID</th>
+      <th>roomID</th>
+      <th>rate</th>
+      <th>enemyGroupID</th>
+      <th>actionFlg</th>
+      <th>messageNo_0</th>
+      <th>messageNo_1</th>
+      <th>messageNo_2</th>
+      <th>messageNo_3</th>
+      <th>messageNo_4</th>
+      <th>worldID</th>
+      <th>areaID</th>
+      <th>dungeonID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>990701690</td>
+      <td>2</td>
+      <td>0</td>
+      <td>90080169</td>
+      <td>1</td>
+      <td>-1</td>
+      <td>-1</td>
+      <td>-1</td>
+      <td>-1</td>
+      <td>-1</td>
+      <td>9</td>
+      <td>907</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>这里我们提取<strong>enemyGroupID</strong>属性所对应的所有值。</p>
+
+<p>这里还有一个问题是：所有csv文件按照相关规则保存在对应目录中，例如：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>...
+dungeon/quest_type_3/area_907/mapEventMonster_990701690.csv
+dungeon/quest_type_3/area_999/mapEventMonster_999999990.csv
+...
+...
+</code></pre>
+</div>
+<p>所以我们需要找深入到目录（及其子目录中；这里一级目录为<code class="highlighter-rouge">dungeon</code>）找到对应csv文件。同时最好建立一个<code class="highlighter-rouge">key-value</code>的字典结构用来保存所有的查找结果。这里<code class="highlighter-rouge">key</code>为stageId(即questId + “0”); <code class="highlighter-rouge">value</code>为对应csv文件的全路径。</p>
+
+<p>代码如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/usr/bin/python</span>
+<span class="c"># coding:utf8</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+
+<span class="c"># 递归目录及其子目录下的文件</span>
+<span class="k">def</span> <span class="nf">dirlist</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">allfile</span><span class="p">):</span>
+	<span class="n">filelist</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filelist</span><span class="p">:</span>
+		<span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+			<span class="n">dirlist</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">allfile</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">allfile</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">filepath</span>
+
+<span class="c"># 从文件的全路径中截取文件名(一般处于全路径的最后一个'/'的后面)</span>
+<span class="k">def</span> <span class="nf">cutFileName</span><span class="p">(</span><span class="n">fullpath</span><span class="p">):</span>
+	<span class="k">return</span> <span class="n">fullpath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">'/'</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c"># 打印list所有元素</span>
+<span class="k">def</span> <span class="nf">printList</span><span class="p">(</span><span class="n">myList</span><span class="p">):</span>
+	<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">myList</span><span class="p">:</span>
+		<span class="k">print</span> <span class="n">item</span>
+
+<span class="c"># 判断文件名是否满足指定后缀</span>
+<span class="k">def</span> <span class="nf">isSurfix</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">surfix</span><span class="p">):</span>
+	<span class="n">filename</span> <span class="o">=</span> <span class="n">cutFileName</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">'.'</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">surfix</span>
+
+<span class="c"># 判断文件名是否满足指定前缀</span>
+<span class="k">def</span> <span class="nf">isPrefix</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+	<span class="n">filename</span> <span class="o">=</span> <span class="n">cutFileName</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">filename</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+
+<span class="c"># 建立key-value的字典结构保存搜索结果</span>
+<span class="c"># key: 		stageId</span>
+<span class="c"># value:  	对应csv的全路径</span>
+<span class="k">def</span> <span class="nf">setDict</span><span class="p">(</span><span class="n">allfile</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">surfix</span><span class="p">):</span>
+	<span class="n">myDict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+	<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">allfile</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">isSurfix</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">surfix</span><span class="p">)</span> <span class="ow">and</span> <span class="n">isPrefix</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+			<span class="n">filename</span> <span class="o">=</span> <span class="n">cutFileName</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+			<span class="n">beg</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span>
+			<span class="n">end</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">surfix</span><span class="p">)</span>
+			<span class="n">stageId</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span><span class="n">beg</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">):</span> <span class="n">end</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+			<span class="n">myDict</span><span class="p">[</span><span class="n">stageId</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
+	<span class="k">return</span> <span class="n">myDict</span>
+
+<span class="c"># 获得对应csv文件的某一列的所有值</span>
+<span class="k">def</span> <span class="nf">getCsvValue</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">colnum</span><span class="p">,</span> <span class="n">ret</span><span class="p">):</span>
+	<span class="c"># print filepath</span>
+	<span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="nb">file</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s">'rb'</span><span class="p">))</span>
+	<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">reader</span><span class="o">.</span><span class="n">line_num</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+			<span class="c"># 跳过第一行属性名</span>
+			<span class="k">continue</span>
+		<span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="n">colnum</span><span class="p">])</span>
+
+<span class="c"># 递归创建目录</span>
+<span class="k">def</span> <span class="nf">createDirs</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="n">outputpath</span><span class="p">):</span>
+	<span class="n">idx</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'dungeon'</span><span class="p">)</span>
+	<span class="n">subpath</span> <span class="o">=</span> <span class="n">path</span><span class="p">[</span><span class="n">idx</span> <span class="p">:</span> <span class="p">]</span>
+	<span class="c">#print subpath</span>
+	<span class="n">outputfullpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outputpath</span><span class="p">,</span> <span class="n">subpath</span><span class="p">)</span>
+
+	<span class="n">idx</span> <span class="o">=</span> <span class="n">outputfullpath</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s">"/"</span><span class="p">)</span>
+	<span class="n">outputfullpath</span> <span class="o">=</span> <span class="n">outputfullpath</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">idx</span><span class="p">]</span>
+	<span class="c">#print outputfullpath</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">outputfullpath</span><span class="p">):</span>
+		<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">outputfullpath</span><span class="p">)</span>
+
+<span class="c"># 拷贝对应文件</span>
+<span class="k">def</span> <span class="nf">copyFile</span><span class="p">(</span><span class="n">srcfile</span><span class="p">,</span> <span class="n">outputpath</span><span class="p">):</span>
+	<span class="n">idx</span> <span class="o">=</span> <span class="n">srcfile</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'dungeon'</span><span class="p">)</span>
+	<span class="n">subpath</span> <span class="o">=</span> <span class="n">srcfile</span><span class="p">[</span><span class="n">idx</span> <span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">srcfile</span><span class="p">)]</span>
+	<span class="n">outputfullpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outputpath</span><span class="p">,</span> <span class="n">subpath</span><span class="p">)</span>
+	<span class="c"># 拷贝文件</span>
+	<span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">srcfile</span><span class="p">,</span> <span class="n">outputfullpath</span><span class="p">)</span>
+
+<span class="c"># main函数</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+
+	<span class="c">#以下各变量需要根据实际情况补全，</span>
+	<span class="c"># 否则无法运行</span>
+	<span class="n">path</span> <span class="o">=</span> 		<span class="c"># "需要扫描的目录路径"</span>
+	<span class="n">prefix</span> <span class="o">=</span> 	<span class="c"># "例如:mapEventMonster_"</span>
+	<span class="n">surfix</span> <span class="o">=</span> 	<span class="c"># "例如：csv"</span>
+	<span class="n">inputfile</span> <span class="o">=</span>	<span class="c"># 例如：open('输入文件名（含路径）', 'rb')</span>
+
+	<span class="n">allfile</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="n">dirlist</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">allfile</span><span class="p">)</span>
+
+	<span class="n">myDict</span> <span class="o">=</span> <span class="n">setDict</span><span class="p">(</span><span class="n">allfile</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">surfix</span><span class="p">)</span>
+
+	<span class="n">ret</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+	<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">inputfile</span><span class="p">:</span>
+		<span class="n">key</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span> <span class="o">+</span> <span class="s">"0"</span>
+		<span class="n">getCsvValue</span><span class="p">(</span><span class="n">myDict</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="mi">3</span><span class="p">,</span> <span class="n">ret</span><span class="p">)</span>
+	<span class="n">ret</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">ret</span><span class="p">))</span> <span class="c"># 去重</span>
+	<span class="n">ret</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span> <span class="c"># 排序</span>
+	<span class="n">printList</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="c"># 打印</span>
+	<span class="n">inputfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+</code></pre>
+</div>
+
+</section>
+
+
+<section class="meta">
+<br/>
+<br/>
+<span>
+	<a  href="http://localhost:4000/mac/2015/12/17/mac-tree-command.html" class="pageNav"  >Previous</a>
+	&nbsp;&nbsp;&nbsp;
+	<a   class="pageNavInvalid"  >Next</a>
+</span>
+<hr>
+<span class="author">
+  <a href="/about/">dswei</a>
+</span>
+<span class="time">
+  /
+  <time datetime="2015-12-15">2015-12-15</time>
+</span>
+<br />
+<span class="license">
+  Published under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">(CC) BY-NC-SA</a>
+</span>
+
+<span class="categories">
+  in categories
+  
+  <a href="/categories/#Python" title="Python">Python</a>&nbsp;
+  
+</span>
+
+
+<span class="tags">
+  tagged with
+  
+  <a href="/tags/#Python" title="Python">Python</a>&nbsp;
+  
+</span>
+
+</section>
+
+<div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+<script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script>
+var cloudTieConfig = {
+  url: document.location.href,
+  sourceId: "",
+  productKey: "24024f5a9d78440199bc1498c6aed9b6",
+  target: "cloud-tie-wrapper"
+};
+var yunManualLoad = true;
+Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+</script>
+
+
+    </article>
+
+  </div>
+
+  <footer>
+    <p>
+      <small>
+        Powered by <a href="https://github.com/mojombo/jekyll">Jekyll</a>
+        | Copyright 2017 - 2017 by <a href="/about/">dswei</a>
+        | <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1262334832'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1262334832%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+      </small>
+    </p>
+  </footer>
+</div>
+
+
+</body>
+</html>
