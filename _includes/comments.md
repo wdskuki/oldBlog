@@ -1,5 +1,9 @@
 <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
-<script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2136837"></script>
+<!-- UY END -->
+
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   tex2jax: {
