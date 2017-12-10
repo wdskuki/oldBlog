@@ -164,3 +164,10 @@ background: #ff0000;
 color: white;
 background: #83BF73;
 }
+.highlighter-rouge{
+	border: 1px solid #CCC;
+	padding:1px 4px;
+	border-radius: 4px;
+	background: #f8f8f8;
+	margin-top: 10px;
+}
