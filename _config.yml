@@ -43,7 +43,7 @@ timezone: Asia/Shanghai #see https://en.wikipedia.org/wiki/List_of_tz_database_t
 ## Author & social ##
 author:
   name: dswei
-  email:  wei_ds@126.com #your Email address e.g. someone@site.com
+  # email:  wei_ds@126.com #your Email address e.g. someone@site.com
   # facebook:  #your Facebook username
   # twitter:  #your Twitter username
   github:  wdskuki #your GitHub username
