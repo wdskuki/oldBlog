@@ -2,7 +2,6 @@
 layout: post
 title: '[USACO] Ordered Fractions'
 description: ''
-category: USACO
 tags: USACO
 ---
 
@@ -122,8 +121,3 @@ int main(){
     return 0;
 }
 ```
-
-
-
-
-

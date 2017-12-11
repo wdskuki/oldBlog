@@ -2,7 +2,6 @@
 layout: post
 title: 'Vue.js组件化开发实践'
 description: 'Vue学习之父子组件通信'
-category: JS
 tags: Vue
 ---
 

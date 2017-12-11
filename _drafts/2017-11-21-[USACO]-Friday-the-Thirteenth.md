@@ -2,7 +2,6 @@
 layout: post
 title: '[USACO] Friday the Thirteenth'
 description: ''
-category: USACO
 tags: USACO
 ---
 
@@ -25,4 +24,3 @@ tags: USACO
 代码
 
 ## 代码
-

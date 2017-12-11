@@ -2,7 +2,6 @@
 layout: post
 title: 'Markdown显示数学公式'
 description: '使用MathJax来显示'
-category: 写作
 tags: Markdown
 ---
 

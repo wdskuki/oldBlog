@@ -2,8 +2,7 @@
 layout: post
 title: 'Ubuntu14.04配置nginx开机自启动项'
 description: 'Linux系统配置'
-category: linux
-tags: nginx
+tags: Nginx
 ---
 
 

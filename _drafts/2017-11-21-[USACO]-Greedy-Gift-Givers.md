@@ -2,7 +2,6 @@
 layout: post
 title: '[USACO] Greedy Gift Givers'
 description: ''
-category: USACO
 tags: USACO
 ---
 
@@ -82,4 +81,3 @@ int main(){
 }
 
 ```
-

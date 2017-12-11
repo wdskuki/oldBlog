@@ -2,7 +2,6 @@
 layout: post
 title: 'ES6中Symbol类型'
 description: ''
-category: JS
 tags: ES6
 ---
 
