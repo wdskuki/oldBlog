@@ -1,12 +1,11 @@
 ---
 layout: post
-title: 'Mapeditor添加新图片元素'
+title: '4.Mapeditor添加新图片元素'
 description: ''
-category: DQMSL
+tags: DQMSL
 ---
 
 
-# 4. Mapeditor添加新图片元素
 
 
 > 当前，讨伐活动很多地图资源都是从2.0.9版本里引入的，而目前mapeditor的版本主要还是和1.0.8对应。也就是说，目前mapeditor中没有关于2.0.9的讨伐活动的相关图片资源。那么我们该如何编辑一些2.0.9的讨伐活动的地图呢？这里，我们首先要做的就需要将2.0.9的相关图片资源导入到当前的mapeditor系统中才行。

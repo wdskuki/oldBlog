@@ -1,13 +1,11 @@
 ---
 layout: post
-title: 'DQMSL Mapeditor配置和机制'
+title: '1.DQMSL Mapeditor配置和机制'
 description: ''
-category: DQMSL
+tags: DQMSL
 ---
 
 
-
-# 1. DQMSL Mapeditor配置和机制
 
 
 > Mapeditor是DQMSL的地图编辑器，游戏策划师可以通过浏览器连接到运行Mapeditor服务器进行地图编辑; 当策划完成了地图编辑之后，后台工程师将策划师编辑好的地图导出到来，放在后台代码中，供后续客户端工程师进行差分操作。

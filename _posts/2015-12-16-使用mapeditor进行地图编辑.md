@@ -1,13 +1,9 @@
 ---
 layout: post
-title: '使用mapeditor进行地图编辑'
+title: '2.使用mapeditor进行地图编辑'
 description: ''
-category: DQMSL
+tags: DQMSL
 ---
-
-
-
-# 2. 使用mapeditor进行地图编辑
 
 
 > DQMSL需要添加相关的活动地图(例如制作常规的讨伐活动),首先需要策划那边利用mapeditor进行地图编辑。我们以配置讨伐活动`area_394`为例来说明如何进行地图编辑。

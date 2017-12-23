@@ -1,13 +1,11 @@
 ---
 layout: post
-title: '从mapeditor导出csv和bin文件'
+title: '3.从mapeditor导出csv和bin文件'
 description: ''
-category: DQMSL
+tags: DQMSL
 ---
 
 
-
-# 3. 从mapeditor导出csv和bin文件
 
 
 > 一旦策划那边完成了地图编辑，剩下的事情就是软件工程师将相关的地图数据（csv和bin文件）导出到后台，来供后续做差分资源使用。
