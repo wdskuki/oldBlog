@@ -6,7 +6,7 @@ comments: yes
 
 1. Web开发者    
 
-   目前就职于[大家中医](http://www.dajiazhongyi.com)，负责[大家中医](http://www.dajiazhongyi.com)Web患者端开发工作；
+   目前就职于[大家中医](http://www.dajiazhongyi.com)，负责[大家中医](http://www.dajiazhongyi.com)Web前端开发工作；
 
    曾经任职于[Garena](https://www.garena.tw/), 担任手游后台开发工程师；
 
@@ -26,3 +26,4 @@ comments: yes
 Email: [wei_ds@126.com](mailto:wei_ds@126.com)     
 
 ----
+
