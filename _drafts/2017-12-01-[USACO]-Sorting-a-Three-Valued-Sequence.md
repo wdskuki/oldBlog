@@ -2,7 +2,6 @@
 layout: post
 title: '[USACO] Sorting a Three-Valued Sequence'
 description: ''
-category: USACO
 tags: USACO
 ---
 
@@ -32,7 +31,7 @@ tags: USACO
 
 证明：
 
-1. 假设序列为数组$a$, 排序后为数组$b$,  其中$a[k] == b[k], k \in[1, N)$ 
+1. 假设序列为数组$a$, 排序后为数组$b$,  其中$a[k] == b[k], k \in[1, N)$
 
 2. 如果序列$a$和序列$b$一致，则得证；
 
@@ -49,6 +48,3 @@ tags: USACO
 6. 由于$b[j]$不和
 
 7. ​
-
-
-

@@ -2,8 +2,7 @@
 layout: post
 title: '蒸茄子'
 description: '蒸茄子'
-category: 美食
-tags: 下厨
+tags: 美食
 ---
 
 ### 蒸茄子

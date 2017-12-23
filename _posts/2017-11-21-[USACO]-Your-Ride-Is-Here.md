@@ -2,7 +2,6 @@
 layout: post
 title: '[USACO] Your Ride is Here'
 description: ''
-category: USACO
 tags: USACO
 ---
 
@@ -52,6 +51,3 @@ int main(){
     return 0;
 }
 ```
-
-
-

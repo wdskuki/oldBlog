@@ -2,7 +2,6 @@
 layout: post
 title: 'Vue父子组件通信（一）'
 description: 'Vue父子组件通信（一）'
-category: JS
 tags: Vue
 ---
 
@@ -208,7 +207,3 @@ var wdsButton = {
 | 参数    | 说明   | 类型     | 可选值       | 默认   |
 | ----- | ---- | ------ | --------- | ---- |
 | color | 按钮颜色 | String | red/color | —    |
-
-
-
-

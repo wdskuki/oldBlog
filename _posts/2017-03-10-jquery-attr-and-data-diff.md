@@ -2,7 +2,6 @@
 layout: post
 title: 'Jquery中.attr()和.data()的区别'
 description: 'Jquery'
-category: JS
 tags: Jquery
 ---
 

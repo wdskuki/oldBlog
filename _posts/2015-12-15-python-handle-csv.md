@@ -2,7 +2,6 @@
 layout: post
 title: 'Python对csv文件的处理'
 description: 'Python对csv文件的处理'
-category: Python
 tags: Python
 ---
 

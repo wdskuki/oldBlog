@@ -2,7 +2,6 @@
 layout: post
 title: 'Mac OS X下的tree命令'
 description: 'tree'
-category: Mac
 tags: Mac
 ---
 

@@ -2,7 +2,6 @@
 layout: post
 title: '[USACO] Castle'
 description: ''
-category: USACO
 tags: USACO
 ---
 
@@ -220,4 +219,3 @@ int main(){
     return 0;
 }
 ```
-
