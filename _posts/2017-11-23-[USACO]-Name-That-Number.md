@@ -3,6 +3,7 @@ layout: post
 title: '[USACO] Name That Number'
 description: ''
 tags: USACO
+mathjax: true
 ---
 
 ## 题目描述

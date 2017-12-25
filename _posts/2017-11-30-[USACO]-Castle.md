@@ -3,6 +3,7 @@ layout: post
 title: '[USACO] Castle'
 description: ''
 tags: USACO
+mathjax: true
 ---
 
 ## 题目描述
