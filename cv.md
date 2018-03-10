@@ -1,14 +1,12 @@
 ---
 layout: empty
 titles:
-  en: cv
-  zh: 简历
-  zh-Hans: 简历
-  zh-Hant: 簡歷
+  en: 卫东升
+  zh: 卫东升
+  zh-Hans: 卫东升
+  zh-Hant: 卫东升
 key: cv
 ---
-
-# 卫东升
 
 ## 基本信息
 
