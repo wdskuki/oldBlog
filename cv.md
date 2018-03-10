@@ -1,10 +1,10 @@
 ---
 layout: empty
 titles:
-  en: 简历
+  en: cv
   zh: 简历
   zh-Hans: 简历
-  zh-Hant: 简历
+  zh-Hant: 簡歷
 key: cv
 ---
 
